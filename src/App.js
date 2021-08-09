@@ -1,23 +1,28 @@
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import InitBird from './InitBird';
+import Modal from './Modal';
 
 function App() {
+  const [modalVisibility, setModalVisibility] = useState(false);
+  
+  function openModal() {
+    setModalVisibility(true);
+  }
+
+  function closeModal() {
+    setModalVisibility(false);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Welcome to Birblist!</h1>
       </header>
+      <button className="Start" onClick={openModal}>List a birb</button>
+      <Modal visible={modalVisibility} close={closeModal}>
+        <InitBird />
+      </Modal>
     </div>
   );
 }

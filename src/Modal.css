@@ -1,0 +1,17 @@
+.Modal {
+    position: absolute;
+    padding: 1vh;
+    width: 50%;
+    top: 25%;
+    left: 25%;
+    background: white;
+    border: 1px solid #ccc;
+    transition: 1.1s ease-out;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.Modal-actions {
+    margin-top: 1vh;
+}
