@@ -26,15 +26,23 @@ function App() {
   let Frame = frameMap[modalFrame];
 
   const [formFields, setFormFields] = useState({});
+  const [allowNext, setAllowNext] = useState(true);
 
-  function saveFormFields(component, field, value) {
+  function saveFormFields(field, value) {
     let newState = {...formFields};
-    if (!newState[component]) {
-      newState[component] = {field: null};
-    }
-    newState[component][field] = value;
+    newState[field] = value;
     setFormFields(newState);
-    console.log(newState);
+  }
+
+  function checkRequiredFields(reqfields) {
+    for (let field of reqfields) {
+      if (!formFields[field.className]) {
+        console.log(formFields, field, field.className);
+        setAllowNext(false);
+        return;
+      }
+    }
+    setAllowNext(true);
   }
 
   function nextFrame() {
@@ -55,8 +63,8 @@ function App() {
   const [allAds, setAllAds] = useState([]);
 
   function renderAd(fields) {
-    let ads = allAds.slice();
-    ads.push(fields);
+    let ads = [fields]
+    allAds.forEach((ad => ads.push(ad)));
     setAllAds(ads);
   }
 
@@ -65,24 +73,28 @@ function App() {
     setModalFrame(0);
     renderAd(formFields);
     setFormFields({});
+    setAllowSubmit(false);
   }
 
   function showAd(fields) {
     return (
         <div className="Ad">
-            <h1>{fields.InitBird.Name}</h1>
+            <h1>{fields.Name}</h1>
             <div className="info">
                 <div className="PreviewImage">
-                    <img src={fields.MiddleBird.Image} />
+                    <img src={fields.Image ? fields.Image : null} />
                 </div>
-                Sex: {fields.InitBird.Sex}
-                <br />
-                How much more adorable than cute: {fields.MiddleBird.Cuteness}%
-                <br />
-                Type of friend: {fields.MiddleBird.Friendtype}
-                <br />
-                Needs to leave before {fields.MiddleBird.Date}
+                <div className="info-text">
+                  <span className="Label-bold">Sex:</span>{fields.Sex}
+                  <br />
+                  <span className="Label-bold">How much more adorable than cute:</span>{fields.Cuteness || 50}%
+                  <br />
+                  <span className="Label-bold">Type of friend:</span>{fields.Friendtype}
+                  <br />
+                  <span className="Label-bold">Needs to leave before {fields.Date}</span>
+                </div>
             </div>
+            <div className="DescriptionPane">{fields.Description}</div>
         </div>
     )
 }
@@ -95,11 +107,11 @@ function App() {
       <button className="Start" onClick={openModal}>List a birb</button>
       {allAds.map((ad) => showAd(ad))}
       <Modal visible={modalVisibility} 
-             next={(modalFrame < numFrames-1) ? nextFrame : null} 
+             next={(modalFrame < numFrames-1 && allowNext) ? nextFrame : null} 
              back={(modalFrame > 0) ? prevFrame : null}
              submit={(modalFrame === numFrames-1 && allowSubmit) ? submit : null} 
              close={closeModal}>
-        <Frame saveFields={saveFormFields} values={formFields} setAllowSubmit={setAllowSubmit} showAd={showAd} />
+        <Frame saveFields={saveFormFields} values={formFields} required={checkRequiredFields} setAllowSubmit={setAllowSubmit} showAd={showAd} />
       </Modal>
     </div>
   );

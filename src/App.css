@@ -33,6 +33,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: solid 1px #282c34;
 }
 
 .Ad .info {
@@ -42,4 +43,8 @@
 
 .Ad .info img {
   max-height: 10em;
+}
+
+.Label-bold {
+  font-weight: bold;
 }

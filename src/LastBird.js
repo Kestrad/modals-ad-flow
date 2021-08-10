@@ -1,7 +1,6 @@
 function LastBird(props){
     function onChange(e) {
-        console.log(e);
-        props.saveFields("LastBird", "Acknowledge", e.target.checked);
+        props.saveFields("Acknowledge", e.target.checked);
         props.setAllowSubmit(e.target.checked);
     }
 
@@ -13,7 +12,7 @@ function LastBird(props){
                 {props.showAd(props.values)}
                 <br />
                 <input type="checkbox" id="acknowledge" value="acknowledge" 
-                       checked={!!props.values?.LastBird?.Acknowledge}
+                       checked={!!props.values?.Acknowledge}
                        onChange={(e) => onChange(e)} />
                 <label for="acknowledge">Yes, this is the ad I want.</label>
             </form>
