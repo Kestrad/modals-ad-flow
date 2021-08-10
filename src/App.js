@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 import InitBird from './InitBird';
+import MiddleBird from './MiddleBird';
+import LastBird from './LastBird';
 import Modal from './Modal';
 
 function App() {
@@ -17,8 +19,8 @@ function App() {
   const [modalFrame, setModalFrame] = useState(0);
 
   const frameMap = {0: InitBird,
-                    1: "MiddleBird",
-                    2: "LastBird",
+                    1: MiddleBird,
+                    2: LastBird,
                    };
   const numFrames = Object.keys(frameMap).length;
   let Frame = frameMap[modalFrame];
@@ -44,11 +46,12 @@ function App() {
 
   function prevFrame() {
     let prev = modalFrame - 1;
-    if (prev > 0) {
+    if (prev >= 0) {
       setModalFrame(prev);
     }
   }
 
+  const [allowSubmit, setAllowSubmit] = useState(false);
   const [allAds, setAllAds] = useState([]);
 
   function renderAd(fields) {
@@ -76,9 +79,9 @@ function App() {
       <Modal visible={modalVisibility} 
              next={(modalFrame < numFrames-1) ? nextFrame : null} 
              back={(modalFrame > 0) ? prevFrame : null}
-             submit={modalFrame === numFrames-1 ? submit : null} 
+             submit={(modalFrame === numFrames-1 && allowSubmit) ? submit : null} 
              close={closeModal}>
-        <Frame saveFields={saveFormFields} values={formFields} />
+        <Frame saveFields={saveFormFields} values={formFields} setAllowSubmit={setAllowSubmit} />
       </Modal>
     </div>
   );
